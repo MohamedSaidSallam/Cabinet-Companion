@@ -1,8 +1,10 @@
 import React from "react";
 import styles from "./Welcome.module.css";
 import Button from "../../components/_common/Button";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Welcome = (props) => {
+  const { loginWithRedirect } = useAuth0();
   return (
     <>
       <div className={styles.wrapper}>
@@ -14,7 +16,11 @@ const Welcome = (props) => {
           log in or sign up to start using the app
         </div>
         <div className={styles.actionButtons}>
-          <Button variant="contained" size="large">
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => loginWithRedirect()}
+          >
             LOGIN
           </Button>
           <Button variant="outlined" size="large">

@@ -11,8 +11,10 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Header({ text }) {
+  const { logout } = useAuth0();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -39,7 +41,7 @@ function Header({ text }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
