@@ -1,0 +1,18 @@
+.header {
+  text-align: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.7em 1em;
+  position: relative;
+}
+.logo {
+  position: absolute;
+}
+.headerText {
+  color: var(--primary);
+  width: 100%;
+
+  font-size: 2.13rem;
+  font-family: "Source Sans Pro";
+  font-weight: 600;
+}
