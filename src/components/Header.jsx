@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function Header({ text }) {
-  const { logout } = useAuth0();
+  const { logout, isAuthenticated } = useAuth0();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -29,25 +29,31 @@ function Header({ text }) {
       <Link to="/" className={styles.headerText}>
         {text}
       </Link>
-      <IconButton aria-label="triple dot menu" onClick={handleClick}>
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
-          <ListItemIcon>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
-        </MenuItem>
-      </Menu>
+      {isAuthenticated && (
+        <>
+          <IconButton aria-label="triple dot menu" onClick={handleClick}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem
+              onClick={() => logout({ returnTo: window.location.origin })}
+            >
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText>Logout</ListItemText>
+            </MenuItem>
+          </Menu>
+        </>
+      )}
     </header>
   );
 }
