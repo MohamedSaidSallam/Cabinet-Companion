@@ -8,6 +8,13 @@
 
   padding-bottom: 1rem;
 }
+@media (min-width: 800px) {
+  .modal {
+    width: 25%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
 .closeButton {
   position: absolute;
   right: 0;

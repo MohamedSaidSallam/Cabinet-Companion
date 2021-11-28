@@ -10,7 +10,13 @@
 
   margin: 1em 2em;
 }
-
+@media (min-width: 800px) {
+  .itemsList {
+    width: 45%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
 .fab {
   position: fixed;
   bottom: 2em;

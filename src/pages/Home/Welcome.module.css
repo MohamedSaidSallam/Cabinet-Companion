@@ -9,6 +9,11 @@
   width: 85%;
   margin: 0 auto;
 }
+@media (min-width: 800px) {
+  .wrapper {
+    width: 55%;
+  }
+}
 .mainMessage {
   font-weight: 600;
   font-size: 1.75rem;
