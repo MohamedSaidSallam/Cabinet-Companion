@@ -15,6 +15,9 @@ const theme = createTheme({
       main: "#288308",
     },
     red: { main: "#830808" },
+    offWhite: { main: "#fefefe" },
+    blue: { main: "#086583" },
+    offBlack: { main: "#3c3c3c" },
   },
   typography: {
     fontFamily: ['"Source Sans Pro"', "Open Sans"].join(","),

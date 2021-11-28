@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./ItemsList.module.css";
@@ -6,9 +6,12 @@ import { useNavigate } from "react-router";
 import useGetItem from "../../query/useGetItems";
 import FullScreenProgress from "../../components/_common/FullScreenProgress";
 import Item from "../../components/Item";
+import ItemDetails from "../../components/ItemDetails";
 
 const ItemsList = (props) => {
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(undefined);
 
   const { isLoading, data } = useGetItem();
   return (
@@ -17,27 +20,29 @@ const ItemsList = (props) => {
         <FullScreenProgress />
       ) : (
         data?.items && (
-          <div className={styles.itemsList}>
-            {data.items.map(
-              ({
-                name,
-                quantity,
-                expireDate,
-                imageUri,
-                quantityUnit,
-                itemId,
-              }) => (
+          <>
+            <div className={styles.itemsList}>
+              {data.items.map((item) => (
                 <Item
-                  name={name}
-                  quantity={quantity}
-                  expireDate={expireDate}
-                  imageUri={imageUri}
-                  quantityUnit={quantityUnit}
-                  key={itemId}
+                  name={item.name}
+                  quantity={item.quantity}
+                  expireDate={item.expireDate}
+                  imageUri={item.imageUri}
+                  quantityUnit={item.quantityUnit}
+                  key={item.itemId}
+                  onClick={() => {
+                    setModalOpen(true);
+                    setSelectedItem(item);
+                  }}
                 />
-              )
-            )}
-          </div>
+              ))}
+            </div>
+            <ItemDetails
+              open={modalOpen}
+              handleClose={() => setModalOpen(false)}
+              item={selectedItem}
+            />
+          </>
         )
       )}
       <div className={styles.fab}>

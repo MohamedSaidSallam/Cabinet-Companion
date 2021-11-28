@@ -2,9 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import style from "./Item.module.css";
 
-const Item = ({ name, quantity, expireDate, imageUri, quantityUnit }) => {
+const Item = ({
+  name,
+  quantity,
+  expireDate,
+  imageUri,
+  quantityUnit,
+  onClick,
+}) => {
   return (
-    <div className={style.wrapper} onClick={() => alert("WIP")}>
+    <div className={style.wrapper} onClick={onClick}>
       <img
         src={imageUri || "https://via.placeholder.com/150"}
         alt="placeholder"
@@ -29,6 +36,7 @@ Item.propTypes = {
   imageUri: PropTypes.string,
   quantity: PropTypes.number.isRequired,
   quantityUnit: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 Item.defaultProp = {

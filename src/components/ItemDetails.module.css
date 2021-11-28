@@ -1,0 +1,60 @@
+.modal {
+  width: 100%;
+  height: 100%;
+  background-color: var(--off-white);
+
+  display: flex;
+  flex-direction: column;
+
+  padding-bottom: 1rem;
+}
+.closeButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.img {
+  border-radius: 0 0 var(--common-border-radius) var(--common-border-radius);
+  width: 100%;
+}
+.imgWrapper {
+  position: relative;
+}
+.itemName {
+  background-color: rgba(0, 0, 0, 0.57);
+  border-radius: 0 0 var(--common-border-radius) var(--common-border-radius);
+  color: white;
+  padding: 1.8em 1.5em;
+
+  position: absolute;
+  bottom: 0.1em;
+  right: 0;
+  width: 100%;
+
+  font-size: 1.2rem;
+}
+.InfoWrapper {
+  margin: 0 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  height: 100%;
+}
+.Info {
+  margin-top: 0.5em;
+
+  font-size: 2.5rem;
+  color: var(--off-black);
+}
+.buttons {
+  display: flex;
+  gap: 1em;
+
+  margin-top: auto;
+}
+.deleteButton {
+  flex-basis: 35%;
+}
+.editButton {
+  flex-grow: 1;
+}
