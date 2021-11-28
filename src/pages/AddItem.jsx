@@ -38,7 +38,6 @@ const AddItem = (props) => {
         .min(0, "Min: 0")
         .max(9999, "Max: 9999")
         .required("Required"),
-      unit: Yup.string().email("Invalid email").required("Required"),
     }),
   });
 
