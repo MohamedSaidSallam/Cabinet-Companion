@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import {
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogTitle,
@@ -17,6 +18,8 @@ import {
 import styles from "./ItemDetails.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "./_common/Button";
+import useDeleteItem from "../query/useDeleteItem";
+import { queryClient } from "../App";
 
 const ItemDetails = ({ open, handleClose, item }) => {
   const [expireDate, createdAt, productionDate] = useMemo(
@@ -31,6 +34,8 @@ const ItemDetails = ({ open, handleClose, item }) => {
     [item]
   );
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+
+  const { isLoading, mutate } = useDeleteItem();
   return (
     <>
       <Modal
@@ -127,21 +132,45 @@ const ItemDetails = ({ open, handleClose, item }) => {
         aria-labelledby="alert-dialog-delete-item"
         aria-describedby="alert-dialog-delete-selected-item"
       >
-        <DialogTitle id="alert-dialog-title">
-          Are you sure you want to delete this item ?
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => alert("WIP")} color="red">
-            Remove
-          </Button>
-          <Button
-            onClick={() => setDeleteDialogVisible(false)}
-            autoFocus
-            color="offBlack"
-          >
-            Nevermind
-          </Button>
-        </DialogActions>
+        {isLoading ? (
+          <CircularProgress size={60} />
+        ) : (
+          <>
+            <DialogTitle id="alert-dialog-title">
+              Are you sure you want to delete this item ?
+            </DialogTitle>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  mutate(item.itemId);
+                  queryClient.setQueryData("itemsList", (prevState) => {
+                    const deletedItemIndex = prevState.items.findIndex(
+                      (prevStateItem) => prevStateItem.itemId === item.itemId
+                    );
+                    prevState.items.splice(deletedItemIndex, 1);
+                    console.log(
+                      "TLC: ~ file: ItemDetails.jsx ~ line 151 ~ queryClient.setQueryData ~ prevState",
+                      prevState
+                    );
+                    return prevState;
+                  });
+                  setDeleteDialogVisible(false);
+                  handleClose();
+                }}
+                color="red"
+              >
+                Remove
+              </Button>
+              <Button
+                onClick={() => setDeleteDialogVisible(false)}
+                autoFocus
+                color="offBlack"
+              >
+                Nevermind
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     </>
   );
