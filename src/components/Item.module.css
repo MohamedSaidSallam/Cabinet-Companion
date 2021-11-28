@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+
+  gap: 1em;
+}
+.img {
+  height: 5.5em;
+
+  border-radius: var(--common-border-radius);
+}
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.8em 0;
+}
+.title {
+  color: var(--off-black);
+
+  font-size: 1.5rem;
+
+  width: 50vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.quantity {
+  color: var(--off-black);
+
+  font-size: 1.15rem;
+}
+.expireDate {
+  color: var(--off-black);
+
+  font-family: Source Sans Pro;
+  font-weight: 300;
+  font-size: 1.2rem;
+}

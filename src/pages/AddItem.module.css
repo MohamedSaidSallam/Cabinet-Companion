@@ -1,0 +1,42 @@
+.wrapper {
+  height: 100%;
+  margin: 1em 1.5em;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.5em;
+}
+.itemImage{
+  border-radius: var(--common-border-radius);
+}
+.clearFile{
+  align-self: center;
+}
+.addImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 2em;
+
+  margin: 5em 0;
+}
+.quantityRow {
+  display: flex;
+  gap: 1em;
+
+  align-items: center;
+}
+.buttons {
+  display: flex;
+  gap: 1em;
+
+  margin-top: auto;
+}
+.cancelButton {
+  flex-basis: 35%;
+}
+.doneButton {
+  flex-grow: 1;
+}

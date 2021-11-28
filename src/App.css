@@ -31,4 +31,6 @@ a {
   --off-black: #3c3c3c;
   --red: #830808;
   --blue: #086583;
+
+  --common-border-radius: 2em;
 }
