@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import Header from "../components/Header";
 import {
   Backdrop,
@@ -23,6 +23,7 @@ import FormikTextField from "../components/_common/FormikTextField";
 import useCreateItem from "../query/useCreateItem";
 import { queryClient } from "../App";
 import { useAuth0 } from "@auth0/auth0-react";
+import useUploadFile from "../query/useUploadFile";
 
 const UNITS = ["Kg", "Gram", "oz", "fl.oz", "Can", "Packet", "Box", "Bottle"];
 
@@ -30,15 +31,28 @@ const AddItem = (props) => {
   const navigate = useNavigate();
 
   const inputFile = useRef(null);
-  const { isLoading, mutate, data } = useCreateItem({
-    onSuccess: () => {
-      queryClient.setQueryData("itemsList", (prevState) => {
-        prevState.items.push(data.item);
-        return prevState;
-      });
-      navigate("/");
+  const { mutate: getUploadUrlMutate, isLoading: isGettingUploadUrlLoading } =
+    useUploadFile({
+      onSuccess: () => {
+        itemCreatedCallback();
+      },
+    });
+  const { isLoading, mutate } = useCreateItem({
+    onSuccess: (data) => {
+      if (formik.values.image) {
+        getUploadUrlMutate({
+          itemId: data.item.itemId,
+          file: formik.values.image,
+        });
+      } else {
+        itemCreatedCallback();
+      }
     },
   });
+  const itemCreatedCallback = () => {
+    queryClient.invalidateQueries("itemsList");
+    navigate("/");
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -67,24 +81,24 @@ const AddItem = (props) => {
       alert("Please Select an image");
       return;
     }
-    const reader = new FileReader();
-
-    reader.onload = function (event) {
-      formik.setFieldValue("image", event.target.result, false);
-    };
-    reader.readAsDataURL(file);
+    formik.setFieldValue("image", file);
   };
 
   const { isAuthenticated } = useAuth0();
   if (!isAuthenticated) {
     navigate("/");
   }
+
+  const previewImage = useMemo(
+    () => formik.values.image && URL.createObjectURL(formik.values.image),
+    [formik.values.image]
+  );
   return (
     <>
       <Header text="Add Item" />
       <Backdrop
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading}
+        open={isLoading || isGettingUploadUrlLoading}
         onClick={() => {}}
       >
         <CircularProgress />
@@ -101,7 +115,7 @@ const AddItem = (props) => {
         {formik.values.image ? (
           <>
             <img
-              src={formik.values.image}
+              src={previewImage}
               alt="User Uploaded"
               className={styles.itemImage}
             />
