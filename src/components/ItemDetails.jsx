@@ -148,10 +148,6 @@ const ItemDetails = ({ open, handleClose, item }) => {
                       (prevStateItem) => prevStateItem.itemId === item.itemId
                     );
                     prevState.items.splice(deletedItemIndex, 1);
-                    console.log(
-                      "TLC: ~ file: ItemDetails.jsx ~ line 151 ~ queryClient.setQueryData ~ prevState",
-                      prevState
-                    );
                     return prevState;
                   });
                   setDeleteDialogVisible(false);
