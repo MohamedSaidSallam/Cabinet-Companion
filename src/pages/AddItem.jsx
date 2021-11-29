@@ -30,17 +30,15 @@ const AddItem = (props) => {
   const navigate = useNavigate();
 
   const inputFile = useRef(null);
-  const { isLoading, mutate, isSuccess, data } = useCreateItem();
-
-  useEffect(() => {
-    if (isSuccess) {
+  const { isLoading, mutate, data } = useCreateItem({
+    onSuccess: () => {
       queryClient.setQueryData("itemsList", (prevState) => {
         prevState.items.push(data.item);
         return prevState;
       });
       navigate("/");
-    }
-  }, [isSuccess, data, navigate]);
+    },
+  });
 
   const formik = useFormik({
     initialValues: {

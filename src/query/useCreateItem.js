@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "react-query";
 import configuredFetch from "./configuredFetch";
 
-const useCreateItem = () => {
+const useCreateItem = (queryConfig) => {
   const { getAccessTokenSilently } = useAuth0();
   return useMutation(async (item) => {
     const token = await getAccessTokenSilently();
@@ -17,7 +17,7 @@ const useCreateItem = () => {
         ...(item.imageUri && { imageUri: item.imageUri }),
       }),
     });
-  });
+  }, queryConfig);
 };
 
 export default useCreateItem;
