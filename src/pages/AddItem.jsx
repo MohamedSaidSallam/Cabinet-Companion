@@ -1,6 +1,12 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Header from "../components/Header";
-import { FormControl, IconButton, TextField } from "@mui/material";
+import {
+  Backdrop,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import Button from "../components/_common/Button";
 import DatePicker from "@mui/lab/DatePicker";
 import styles from "./AddItem.module.css";
@@ -14,11 +20,27 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import FormikTextField from "../components/_common/FormikTextField";
+import useCreateItem from "../query/useCreateItem";
+import { queryClient } from "../App";
+import { useAuth0 } from "@auth0/auth0-react";
+
+const UNITS = ["Kg", "Gram", "oz", "fl.oz", "Can", "Packet", "Box", "Bottle"];
 
 const AddItem = (props) => {
   const navigate = useNavigate();
 
   const inputFile = useRef(null);
+  const { isLoading, mutate, isSuccess, data } = useCreateItem();
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.setQueryData("itemsList", (prevState) => {
+        prevState.items.push(data.item);
+        return prevState;
+      });
+      navigate("/");
+    }
+  }, [isSuccess, data, navigate]);
 
   const formik = useFormik({
     initialValues: {
@@ -29,8 +51,8 @@ const AddItem = (props) => {
       unit: 1,
       image: undefined,
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (newItem) => {
+      mutate({ ...newItem, unit: UNITS[newItem.unit] });
     },
     validationSchema: Yup.object().shape({
       itemName: Yup.string().max(255, "Max Length (255)").required("Required"),
@@ -54,9 +76,21 @@ const AddItem = (props) => {
     };
     reader.readAsDataURL(file);
   };
+
+  const { isAuthenticated } = useAuth0();
+  if (!isAuthenticated) {
+    navigate("/");
+  }
   return (
     <>
       <Header text="Add Item" />
+      <Backdrop
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+        onClick={() => {}}
+      >
+        <CircularProgress />
+      </Backdrop>
       <input
         type="file"
         id="file"
@@ -160,14 +194,11 @@ const AddItem = (props) => {
               label="Unit"
               onChange={formik.handleChange}
             >
-              <MenuItem value={1}>Kg</MenuItem>
-              <MenuItem value={2}>Gram</MenuItem>
-              <MenuItem value={3}>oz</MenuItem>
-              <MenuItem value={4}>fl.oz</MenuItem>
-              <MenuItem value={5}>Can</MenuItem>
-              <MenuItem value={6}>Packet</MenuItem>
-              <MenuItem value={7}>Box</MenuItem>
-              <MenuItem value={8}>Bottle</MenuItem>
+              {UNITS.map((unit, index) => (
+                <MenuItem key={unit} value={index + 1}>
+                  {unit}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>
