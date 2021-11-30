@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
+import GlobalStore from "./store/GlobalStore";
 
 const theme = createTheme({
   palette: {
@@ -38,12 +39,14 @@ function App() {
       >
         <QueryClientProvider client={queryClient}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/AddItem" element={<AddItem />}></Route>
-              </Routes>
-            </BrowserRouter>
+            <GlobalStore>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Home />}></Route>
+                  <Route path="/AddItem" element={<AddItem />}></Route>
+                </Routes>
+              </BrowserRouter>
+            </GlobalStore>
           </LocalizationProvider>
         </QueryClientProvider>
       </Auth0Provider>
