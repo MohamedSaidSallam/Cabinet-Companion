@@ -20,8 +20,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import Button from "./_common/Button";
 import useDeleteItem from "../query/useDeleteItem";
 import { queryClient } from "../App";
+import { useStore } from "../store/GlobalStore";
+import ReducerActions from "../store/ReducerActions";
+import { useNavigate } from "react-router";
 
 const ItemDetails = ({ open, handleClose, item }) => {
+  const navigate = useNavigate();
+  const [, dispatch] = useStore();
+
   const [expireDate, createdAt, productionDate] = useMemo(
     () =>
       item
@@ -114,7 +120,13 @@ const ItemDetails = ({ open, handleClose, item }) => {
                       variant="outlined"
                       size="large"
                       className={styles.editButton}
-                      onClick={() => alert("wip")}
+                      onClick={() => {
+                        dispatch({
+                          type: ReducerActions.setSelectedItem,
+                          payload: item,
+                        });
+                        navigate("/addItem");
+                      }}
                       color="blue"
                     >
                       Edit

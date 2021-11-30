@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useRef } from "react";
 import Header from "../components/Header";
 import {
   Backdrop,
@@ -24,11 +24,15 @@ import useCreateItem from "../query/useCreateItem";
 import { queryClient } from "../App";
 import { useAuth0 } from "@auth0/auth0-react";
 import useUploadFile from "../query/useUploadFile";
+import { useStore } from "../store/GlobalStore";
+import ReducerActions from "../store/ReducerActions";
+import useEditItem from "../query/useEditItem";
 
 const UNITS = ["Kg", "Gram", "oz", "fl.oz", "Can", "Packet", "Box", "Bottle"];
 
 const AddItem = (props) => {
   const navigate = useNavigate();
+  const [{ selectedItem }, dispatch] = useStore();
 
   const inputFile = useRef(null);
   const { mutate: getUploadUrlMutate, isLoading: isGettingUploadUrlLoading } =
@@ -37,11 +41,24 @@ const AddItem = (props) => {
         itemCreatedCallback();
       },
     });
-  const { isLoading, mutate } = useCreateItem({
-    onSuccess: (data) => {
+  const { isLoading: isCreateItemLoading, mutate: createItemMutate } =
+    useCreateItem({
+      onSuccess: (data) => {
+        if (formik.values.image) {
+          getUploadUrlMutate({
+            itemId: data.item.itemId,
+            file: formik.values.image,
+          });
+        } else {
+          itemCreatedCallback();
+        }
+      },
+    });
+  const { isLoading: isEditItemLoading, mutate: editItemMutate } = useEditItem({
+    onSuccess: () => {
       if (formik.values.image) {
         getUploadUrlMutate({
-          itemId: data.item.itemId,
+          itemId: selectedItem.itemId,
           file: formik.values.image,
         });
       } else {
@@ -50,21 +67,32 @@ const AddItem = (props) => {
     },
   });
   const itemCreatedCallback = () => {
+    if(selectedItem.itemId){
+      dispatch({ type: ReducerActions.clearSelectedItem });
+    }
     queryClient.invalidateQueries("itemsList");
     navigate("/");
   };
 
   const formik = useFormik({
     initialValues: {
-      itemName: "",
-      expireDate: new Date(),
-      productionDate: new Date(),
-      quantity: 1,
-      unit: 1,
+      itemName: selectedItem?.name || "",
+      expireDate: selectedItem?.expireDate || new Date(),
+      productionDate: selectedItem?.productionDate || new Date(),
+      quantity: selectedItem?.quantity || 1,
+      unit: selectedItem?.quantityUnit
+        ? UNITS.indexOf(selectedItem?.quantityUnit)
+        : 1,
       image: undefined,
+      imagePreview: selectedItem?.imageUri || undefined,
     },
     onSubmit: (newItem) => {
-      mutate({ ...newItem, unit: UNITS[newItem.unit] });
+      const newItemBackend = { ...newItem, unit: UNITS[newItem.unit] };
+      if (selectedItem?.itemId) {
+        editItemMutate({ itemId: selectedItem.itemId, item: newItemBackend });
+      } else {
+        createItemMutate(newItemBackend);
+      }
     },
     validationSchema: Yup.object().shape({
       itemName: Yup.string().max(255, "Max Length (255)").required("Required"),
@@ -82,23 +110,21 @@ const AddItem = (props) => {
       return;
     }
     formik.setFieldValue("image", file);
+    formik.setFieldValue("imagePreview", URL.createObjectURL(file));
   };
 
   const { isAuthenticated } = useAuth0();
   if (!isAuthenticated) {
     navigate("/");
   }
-
-  const previewImage = useMemo(
-    () => formik.values.image && URL.createObjectURL(formik.values.image),
-    [formik.values.image]
-  );
   return (
     <>
       <Header text="Add Item" />
       <Backdrop
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading || isGettingUploadUrlLoading}
+        open={
+          isCreateItemLoading || isEditItemLoading || isGettingUploadUrlLoading
+        }
         onClick={() => {}}
       >
         <CircularProgress />
@@ -112,17 +138,20 @@ const AddItem = (props) => {
         onChange={addImage}
       />
       <div className={styles.wrapper}>
-        {formik.values.image ? (
+        {formik.values.imagePreview ? (
           <>
             <img
-              src={previewImage}
+              src={formik.values.imagePreview}
               alt="User Uploaded"
               className={styles.itemImage}
             />
             <div className={styles.clearFile}>
               <IconButton
                 aria-label="remove image"
-                onClick={() => formik.setFieldValue("image", undefined, false)}
+                onClick={() => {
+                  formik.setFieldValue("image", undefined, false);
+                  formik.setFieldValue("imagePreview", undefined, false);
+                }}
               >
                 <ClearIcon sx={{ fontSize: 50 }} />
               </IconButton>
@@ -220,7 +249,10 @@ const AddItem = (props) => {
             size="large"
             color="red"
             className={styles.cancelButton}
-            onClick={() => navigate("/")}
+            onClick={() => {
+              dispatch({ type: ReducerActions.clearSelectedItem });
+              navigate("/");
+            }}
           >
             Cancel
           </Button>
