@@ -67,7 +67,7 @@ const AddItem = (props) => {
     },
   });
   const itemCreatedCallback = () => {
-    if(selectedItem.itemId){
+    if (selectedItem.itemId) {
       dispatch({ type: ReducerActions.clearSelectedItem });
     }
     queryClient.invalidateQueries("itemsList");
@@ -87,7 +87,7 @@ const AddItem = (props) => {
       imagePreview: selectedItem?.imageUri || undefined,
     },
     onSubmit: (newItem) => {
-      const newItemBackend = { ...newItem, unit: UNITS[newItem.unit] };
+      const newItemBackend = { ...newItem, unit: UNITS[newItem.unit - 1] };
       if (selectedItem?.itemId) {
         editItemMutate({ itemId: selectedItem.itemId, item: newItemBackend });
       } else {
@@ -250,7 +250,9 @@ const AddItem = (props) => {
             color="red"
             className={styles.cancelButton}
             onClick={() => {
-              dispatch({ type: ReducerActions.clearSelectedItem });
+              if (selectedItem.itemId) {
+                dispatch({ type: ReducerActions.clearSelectedItem });
+              }
               navigate("/");
             }}
           >
