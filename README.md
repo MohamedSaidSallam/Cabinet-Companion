@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Cabinet Companion
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![GitHub Release][github_release_badge]][github_release_link]
+[![License][license-image]][license-url]
 
-## Available Scripts
+A web app for managing you kitchen cabinet. You can add items, set their expiration date and quantity and update them whenever you use them.
 
-In the project directory, you can run:
+[Serverless Backend Repo](https://github.com/TheDigitalPhoenixX/Cabinet-Companion-Backend)
 
-### `npm start`
+> Done as a Capstone project for [Udacity's Cloud Developer Nanodegree](https://www.udacity.com/course/cloud-developer-nanodegree--nd9990)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Screenshots
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<table>
+    <tr>
+        <td> <img src="docs/screenshots/Welcome.png" alt="Welcome"></td>
+        <td><img src="docs/screenshots/noItems.png" alt="noItems"></td>
+    </tr>
+    <tr>
+        <td><img src="docs/screenshots/addItem.png" alt="3"></td>
+        <td><img src="docs/screenshots/addItemFilled.png" alt="4">
+        </td>
+    </tr>
+    <tr>
+        <td><img src="docs/screenshots/itemsList.png" alt="3"></td>
+        <td><img src="docs/screenshots/itemDetails.png" alt="4">
+        </td>
+    </tr>
+</table>
 
-### `npm test`
+### Run Code
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Duplicate ``.env.example`` file and rename it to ``.env`` then fill in the info.
+- type ``npm i`` in the terminal
+- type ``npm start`` in the terminal
 
-### `npm run build`
+[license-image]: https://img.shields.io/badge/License-MIT-brightgreen.svg
+[license-url]: https://opensource.org/licenses/MIT
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[github_release_badge]: https://img.shields.io/github/v/release/TheDigitalPhoenixX/Cabinet-Companion.svg?style=flat&include_prereleases
+[github_release_link]: https://github.com/TheDigitalPhoenixX/Cabinet-Companion/releases
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[github-contributors]: https://github.com/TheDigitalPhoenixX/Cabinet-Companion/contributors
+[github-tags]: https://github.com/TheDigitalPhoenixX/Cabinet-Companion/tags
