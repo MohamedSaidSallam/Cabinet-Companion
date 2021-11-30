@@ -23,7 +23,11 @@ const Welcome = (props) => {
           >
             LOGIN
           </Button>
-          <Button variant="outlined" size="large">
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => loginWithRedirect({ screen_hint: "signup" })}
+          >
             Register
           </Button>
         </div>
